@@ -1,0 +1,77 @@
+import React from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+
+export default function Category() {
+  const [searchInput, setsearchInput] = useState("");
+  const { category } = useParams();
+  const [meals, setMeals] = useState([]);
+
+  useEffect(() => {
+    const mealByCategory =
+      "https://www.themealdb.com/api/json/v1/1/filter.php?c=" + category;
+    const mealBySearch =
+      "https://www.themealdb.com/api/json/v1/1/search.php?s=" + searchInput;
+    fetch(searchInput ? mealBySearch : mealByCategory)
+      .then((Response) => Response.json())
+      .then((results) => {
+        if (!results.meals) return setMeals([]);
+        setMeals(results.meals);
+      });
+  }, [searchInput]);
+  const navigate = useNavigate();
+  return (
+    <div className="meals">
+      <div
+        className="d-flex justify-content-between"
+        style={{
+          marginLeft: "100px",
+          marginBottom: "-50px",
+          marginTop: "40px",
+        }}
+      >
+        <h1>{category}</h1>
+        <div className="d-flex align-items-center">
+          <img
+            src="/icons/magnifying-glass-solid.svg"
+            style={{
+              position: "relative",
+              right: "-30px",
+              width: "15px",
+            }}
+            alt="icon"
+          />
+          <input
+            value={searchInput}
+            onChange={(event) => setsearchInput(event.target.value)}
+            placeholder="Search"
+            style={{ marginRight: "80px", height: "40px", paddingLeft: "40px" }}
+          />
+        </div>
+      </div>
+      <div
+        className="site-layout-background"
+        style={{
+          gap: "1rem",
+          display: "grid",
+          gridTemplateColumns: "repeat(4, minmax(0, 1fr)",
+          padding: "80px",
+        }}
+      >
+        {meals.map((meal) => (
+          <div>
+            <span onClick={() => navigate("/Detail/" + meal.idMeal)}>
+              <Card>
+                <img src={meal.strMealThumb} alt="example" />
+                <p style={{ marginLeft: "10px" }}>{meal.strMeal}</p>
+                <p style={{ marginLeft: "10px" }}>{meal.strCategory}</p>
+              </Card>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
