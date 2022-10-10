@@ -5,7 +5,6 @@ import { Nav, Navbar as Navbarbootstrap } from "react-bootstrap";
 const Navbar = () => {
   const { pathname } = useLocation();
   function activNavbar(Nav) {
-    console.log(Nav, pathname);
     return "/" + Nav === pathname;
   }
   return (

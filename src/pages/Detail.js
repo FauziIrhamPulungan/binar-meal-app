@@ -5,12 +5,11 @@ import { useParams } from "react-router-dom";
 export default function Detail() {
   const { id } = useParams();
   const [meal, setMeal] = useState([]);
-  console.log(meal);
   useEffect(() => {
     fetch("https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + id)
       .then((Response) => Response.json())
       .then((results) => setMeal(results.meals[0]));
-  }, []);
+  }, [id]);
   return (
     <div className="d-flex">
       <div
@@ -32,8 +31,8 @@ export default function Detail() {
         className="d-flex justify-content-between"
         style={{
           width: "900px",
-          height: "500px",
-          border: "1px solid black",
+          height: "700px",
+          border: "1px solid",
           margin: "40px",
           marginTop: "50px",
           marginLeft: "-60px",
